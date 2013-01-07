@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="AcmTimusEclipsePlugin"
+            id="AcmTimusEclipsePlugin">
+      </category>
+      <view
+            name="ACMTimus - Problem Set"
+            icon="icons/acmtimus.gif"
+            category="AcmTimusEclipsePlugin"
+            class="org.abratuhi.acmtimus.views.ProblemSetView"
+            id="org.abratuhi.acmtimus.views.ProblemSetView">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.jdt.ui.JavaPerspective">
+         <view
+               ratio="0.5"
+               relative="org.eclipse.ui.views.TaskList"
+               relationship="right"
+               id="org.abratuhi.acmtimus.views.ProblemSetView">
+         </view>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.help.contexts">
+      <contexts
+            file="contexts.xml">
+      </contexts>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+         <menuContribution
+            locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
+         <command
+               commandId="org.abratuhi.acmtimus.actions.submit"
+               label="ACMTimus - Submit solution"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="activeMenuSelection">
+                  <iterate
+                        ifEmpty="false"
+                        operator="or">
+                     <adapt
+                           type="org.eclipse.jdt.core.ICompilationUnit">
+                     </adapt>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            defaultHandler="org.abratuhi.acmtimus.actions.SubmitAction"
+            id="org.abratuhi.acmtimus.actions.submit"
+            name="Submit">
+      </command>
+   </extension>
+
+</plugin>
