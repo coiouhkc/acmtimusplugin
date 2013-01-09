@@ -15,8 +15,6 @@ public class ProblemParser {
 	
 	public final Problem parse(String num) throws ParseException{
 		try {
-			//System.setProperty("http.proxyHost", "proxy01.vodafone-is.de");
-			//System.setProperty("http.proxyPort", "8080");
 			Document doc = Jsoup.connect(PROBLEM_URL + num).get();
 			Element table = doc.select(PROBLEM_SELECTOR).first();
 			
