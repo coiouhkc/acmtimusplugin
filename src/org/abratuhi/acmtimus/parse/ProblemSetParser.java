@@ -20,8 +20,6 @@ public class ProblemSetParser {
 	public final List<ProblemRef> parse(String url) throws ParseException {
 		List<ProblemRef> result = new Vector<ProblemRef>();
 		try {
-			//System.setProperty("http.proxyHost", "proxy01.vodafone-is.de");
-			//System.setProperty("http.proxyPort", "8080");
 			Document doc = Jsoup.connect(url).get();
 			Element table = doc.select(PROBLEM_SET_TABLE_SELECTOR).first();
 			Elements rows = table.select(PROBLEM_SET_TR_SELECTOR);
