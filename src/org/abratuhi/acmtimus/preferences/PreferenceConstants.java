@@ -1,4 +1,4 @@
-package acmtimuseclipseplugin.preferences;
+package org.abratuhi.acmtimus.preferences;
 
 /**
  * Constant definitions for plug-in preferences

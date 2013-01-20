@@ -1,9 +1,9 @@
-package acmtimuseclipseplugin.preferences;
+package org.abratuhi.acmtimus.preferences;
 
+import org.abratuhi.acmtimus.Activator;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 
-import acmtimuseclipseplugin.Activator;
 
 /**
  * Class used to initialize default preference values.

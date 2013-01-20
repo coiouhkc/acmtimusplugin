@@ -2,6 +2,8 @@ package org.abratuhi.acmtimus.actions;
 
 import java.io.File;
 
+import org.abratuhi.acmtimus.Activator;
+import org.abratuhi.acmtimus.preferences.PreferenceConstants;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.URI;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -22,8 +24,6 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import acmtimuseclipseplugin.Activator;
-import acmtimuseclipseplugin.preferences.PreferenceConstants;
 
 /**
  * This class represents a submit pop-up for the Package Explorer View in Eclipse.

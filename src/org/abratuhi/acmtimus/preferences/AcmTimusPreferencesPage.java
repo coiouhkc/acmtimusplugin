@@ -1,9 +1,9 @@
-package acmtimuseclipseplugin.preferences;
+package org.abratuhi.acmtimus.preferences;
 
+import org.abratuhi.acmtimus.Activator;
 import org.eclipse.jface.preference.*;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbench;
-import acmtimuseclipseplugin.Activator;
 
 /**
  * This class represents a preference page that is contributed to the

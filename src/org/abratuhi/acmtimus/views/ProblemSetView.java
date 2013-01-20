@@ -4,11 +4,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.abratuhi.acmtimus.Activator;
 import org.abratuhi.acmtimus.model.Problem;
 import org.abratuhi.acmtimus.model.ProblemRef;
 import org.abratuhi.acmtimus.parse.ParseException;
 import org.abratuhi.acmtimus.parse.ProblemParser;
 import org.abratuhi.acmtimus.parse.ProblemSetParser;
+import org.abratuhi.acmtimus.preferences.PreferenceConstants;
 import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -49,8 +51,6 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.util.tracker.ServiceTracker;
 
-import acmtimuseclipseplugin.Activator;
-import acmtimuseclipseplugin.preferences.PreferenceConstants;
 
 /**
  * Viewer for the problems defined on the acm.timus.ru page.

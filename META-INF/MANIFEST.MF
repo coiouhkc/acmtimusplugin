@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: AcmTimusEclipsePlugin
 Bundle-SymbolicName: AcmTimusEclipsePlugin; singleton:=true
 Bundle-Version: 1.0.0.0
-Bundle-Activator: acmtimuseclipseplugin.Activator
+Bundle-Activator: org.abratuhi.acmtimus.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources;bundle-version="3.8.1",

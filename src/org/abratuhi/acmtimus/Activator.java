@@ -1,4 +1,4 @@
-package acmtimuseclipseplugin;
+package org.abratuhi.acmtimus;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
