@@ -28,6 +28,7 @@ public class ProblemSetParser {
 	public final List<ProblemRef> parse(String url, IProxyService proxyService) throws ParseException {
 		List<ProblemRef> result = new Vector<ProblemRef>();
 		try {
+<<<<<<< HEAD
 			URI uri = new URI(PROBLEM_SET_URL);
             IProxyData[] proxyDataForHost = proxyService.select(uri);
  
@@ -42,6 +43,8 @@ public class ProblemSetParser {
                 }
             }
 			
+=======
+>>>>>>> b92a310a5ee0478d4cd955c7553b6fb2eb027df9
 			Document doc = Jsoup.connect(url).get();
 			Element table = doc.select(PROBLEM_SET_TABLE_SELECTOR).first();
 			Elements rows = table.select(PROBLEM_SET_TR_SELECTOR);
