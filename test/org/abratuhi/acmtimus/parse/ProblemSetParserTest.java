@@ -13,7 +13,7 @@ public class ProblemSetParserTest extends TestCase{
 	public void testListProblems() {
 		try {
 			ProblemSetParser psp = new ProblemSetParser();
-			List<ProblemRef> pfs = psp.parse(ProblemSetParser.PROBLEM_SET_URL);
+			List<ProblemRef> pfs = psp.parse(ProblemSetParser.PROBLEM_SET_URL, null);
 			for(ProblemRef pf: pfs) {
 				System.out.println(pf.getId() + ": " + pf.getName());
 			}

@@ -1,8 +1,22 @@
 package org.abratuhi.acmtimus.model;
 
+/**
+ * This class represents a problem reference, identified by its number and additionally its name.
+ * 
+ * @author Alexei Bratuhin
+ *
+ */
 public class ProblemRef {
 	
+	/**
+	 * Problem Id, ProblemNum.
+	 */
 	private final String id;
+	
+	
+	/**
+	 * Short name of the problem.
+	 */
 	private final String name;
 	
 	public ProblemRef(String id, String name) {

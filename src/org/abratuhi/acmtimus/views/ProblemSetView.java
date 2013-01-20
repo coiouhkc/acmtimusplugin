@@ -9,7 +9,7 @@ import org.abratuhi.acmtimus.model.ProblemRef;
 import org.abratuhi.acmtimus.parse.ParseException;
 import org.abratuhi.acmtimus.parse.ProblemParser;
 import org.abratuhi.acmtimus.parse.ProblemSetParser;
-import org.abratuhi.acmtimus.preferencies.Prefs;
+import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -27,6 +27,7 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.launching.IVMInstall;
 import org.eclipse.jdt.launching.JavaRuntime;
 import org.eclipse.jdt.launching.LibraryLocation;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -35,52 +36,64 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.part.ViewPart;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.osgi.framework.FrameworkUtil;
+import org.osgi.util.tracker.ServiceTracker;
 
+import acmtimuseclipseplugin.Activator;
+import acmtimuseclipseplugin.preferences.PreferenceConstants;
+
+/**
+ * Viewer for the problems defined on the acm.timus.ru page.
+ * Allows for exporting the problems to a specified project and package in the current workspace.
+ * 
+ * @author Alexei Bratuhin
+ * 
+ */
 public class ProblemSetView extends ViewPart {
-	public ProblemSetView() {
-	}
 
 	private TableViewer viewer;
 	private Browser browser;
 	private Button export;
+	private final ServiceTracker proxyTracker;
+	private SashForm sashForm;
+
+	public ProblemSetView() {
+		Image icon = AbstractUIPlugin.imageDescriptorFromPlugin(
+				Activator.PLUGIN_ID, "/icons/acmtimus.gif").createImage();
+		setTitleImage(icon);
+
+		proxyTracker = new ServiceTracker(FrameworkUtil.getBundle(
+				this.getClass()).getBundleContext(),
+				IProxyService.class.getName(), null);
+		proxyTracker.open();
+	}
 
 	@Override
 	public void createPartControl(Composite parent) {
-		viewer = new TableViewer(parent, SWT.SINGLE | SWT.H_SCROLL
+
+		sashForm = new SashForm(parent, SWT.BORDER);
+		viewer = new TableViewer(sashForm, SWT.SINGLE | SWT.H_SCROLL
 				| SWT.V_SCROLL);
-		viewer.setContentProvider(new ProblemSetContentProvider());
-		viewer.setInput(new String[] { "one", "two" });
 
-		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-				if (event.getSelection() instanceof IStructuredSelection) {
-					IStructuredSelection selection = (IStructuredSelection) event
-							.getSelection();
-					ProblemRef pf = (ProblemRef) selection.getFirstElement();
-					ProblemParser pp = new ProblemParser();
-					try {
-						Problem p = pp.parse(pf.getId());
-						browser.setText(p.getRaw());
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		});
+		Composite comp1 = new Composite(sashForm, SWT.NONE | SWT.FILL);
+		GridLayout gl_comp1 = new GridLayout(1, false);
+		gl_comp1.verticalSpacing = 0;
+		gl_comp1.marginHeight = 0;
+		gl_comp1.horizontalSpacing = 0;
+		comp1.setLayout(gl_comp1);
 
-		Composite comp1 = new Composite(parent, SWT.NONE);
-		comp1.setLayout(new RowLayout(SWT.VERTICAL));
-
-		browser = new Browser(comp1, SWT.ALL);
-		browser.setLayoutData(new RowData(294, 426));
+		browser = new Browser(comp1, SWT.NONE | SWT.FILL);
+		browser.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		export = new Button(comp1, SWT.CENTER);
 		export.setText("Export");
@@ -88,7 +101,11 @@ public class ProblemSetView extends ViewPart {
 			@Override
 			public void handleEvent(Event event) {
 				try {
-					String projectDirectoryName = Prefs.get(Prefs.PREF_PROJECT);
+					IPreferenceStore store = Activator.getDefault()
+							.getPreferenceStore();
+
+					String projectDirectoryName = store
+							.getString(PreferenceConstants.PREF_PROJECT);
 					IWorkspace workspace = ResourcesPlugin.getWorkspace();
 					File workspaceDirectory = workspace.getRoot().getLocation()
 							.toFile();
@@ -149,52 +166,121 @@ public class ProblemSetView extends ViewPart {
 								.newSourceEntry(froot.getPath());
 						javaProject.setRawClasspath(newEntries, null);
 					}
-					
+
 					IWorkspaceRoot root = workspace.getRoot();
 					IProject project = root.getProject(projectDirectoryName);
 					IJavaProject javaProject = JavaCore.create(project);
-					
+
 					IFolder sourceFolder = project.getFolder("src");
 					IPackageFragmentRoot froot = javaProject
 							.getPackageFragmentRoot(sourceFolder);
-					String packageName = Prefs.get(Prefs.PREF_PACKAGE);
-					IPackageFragment pack = froot.createPackageFragment(packageName, false, null);
-					
-					IStructuredSelection selection = (IStructuredSelection) viewer.getSelection();
+					String packageName = store
+							.getString(PreferenceConstants.PREF_PACKAGE);
+					IPackageFragment pack = froot.createPackageFragment(
+							packageName, false, null);
+
+					IStructuredSelection selection = (IStructuredSelection) viewer
+							.getSelection();
 					ProblemRef pf = (ProblemRef) selection.getFirstElement();
-					ICompilationUnit cu = pack.createCompilationUnit(pf2classfilename(pf), pf2classsource(pf), false, null);
-					
+					ICompilationUnit cu = pack.createCompilationUnit(
+							pf2classfilename(pf), pf2classsource(pf), false,
+							null);
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		});
+		viewer.setContentProvider(new ProblemSetContentProvider(
+				getProxyService()));
+		viewer.setInput(new String[] { "one", "two" });
+
+		viewer.addSelectionChangedListener(new ISelectionChangedListener() {
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+				if (event.getSelection() instanceof IStructuredSelection) {
+					IStructuredSelection selection = (IStructuredSelection) event
+							.getSelection();
+					ProblemRef pf = (ProblemRef) selection.getFirstElement();
+					ProblemParser pp = new ProblemParser();
+					try {
+						Problem p = pp.parse(pf.getId(), getProxyService());
+						browser.setText(p.getRaw());
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+		sashForm.setWeights(new int[] { 1, 3 });
+	}
+
+	public IProxyService getProxyService() {
+		return (IProxyService) proxyTracker.getService();
 	}
 
 	@Override
 	public void setFocus() {
 		viewer.getControl().setFocus();
 	}
-	
+
+	@Override
+	public void dispose() {
+		proxyTracker.close();
+		super.dispose();
+	}
+
 	private String pf2classname(ProblemRef pf) {
 		return new String("Problem" + pf.getId());
 	}
-	
+
 	private String pf2classfilename(ProblemRef pf) {
 		return new String("Problem" + pf.getId() + ".java");
 	}
-	
-	private String pf2classsource(ProblemRef pf){
+
+	private String pf2classsource(ProblemRef pf) {
 		StringBuffer sb = new StringBuffer();
 		String classname = pf2classname(pf);
-		sb.append("public class " + classname + " { \n");
-		sb.append("} \n");
+		String id = pf.getId();
+		sb.append("import java.io.InputStream;");
+		sb.append("import java.io.OutputStream;\n");
+		sb.append("import java.io.PrintStream;\n");
+		sb.append("import java.io.PrintWriter;\n");
+		sb.append("import java.util.Scanner;\n");
+		sb.append("\n");
+		sb.append("public class " + classname + " {\n");
+		sb.append("public static final int PROBLEM_ID = " + id + ";\n");
+		sb.append("\n");
+		sb.append("private static void solve(InputStream in, OutputStream out) {\n");
+		sb.append("try {\n");
+		sb.append("Scanner sc = new Scanner(in);\n");
+		sb.append("PrintWriter pw = new PrintWriter(out);\n");
+		sb.append("\n");
+		sb.append("// INSERT YOUR SOLUTION CODE HERE\n");
+		sb.append("\n");
+		sb.append("pw.flush();\n");
+		sb.append("} catch (Throwable t) {\n");
+		sb.append("t.printStackTrace(new PrintStream(out));\n");
+		sb.append("}\n");
+		sb.append("}\n");
+		sb.append("\n");
+		sb.append("public static void main (String [] args) {\n");
+		sb.append("solve(System.in, System.out);\n");
+		sb.append("}\n");
+		sb.append("\n");
+		sb.append("}\n");
 		return sb.toString();
 	}
 
 }
 
 class ProblemSetContentProvider implements IStructuredContentProvider {
+
+	private final IProxyService proxyService;
+
+	public ProblemSetContentProvider(IProxyService proxyService) {
+		this.proxyService = proxyService;
+	}
 
 	@Override
 	public void dispose() {
@@ -208,7 +294,8 @@ class ProblemSetContentProvider implements IStructuredContentProvider {
 	public Object[] getElements(Object parent) {
 		try {
 			ProblemSetParser psp = new ProblemSetParser();
-			List<ProblemRef> pfs = psp.parse(ProblemSetParser.PROBLEM_SET_URL);
+			List<ProblemRef> pfs = psp.parse(ProblemSetParser.PROBLEM_SET_URL,
+					proxyService);
 			return pfs.toArray();
 		} catch (ParseException e) {
 			e.printStackTrace();

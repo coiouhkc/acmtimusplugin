@@ -10,7 +10,7 @@ public class ProblemParserTest extends TestCase{
 	public void testListProblems() {
 		try {
 			ProblemParser psp = new ProblemParser();
-			psp.parse("1001");
+			psp.parse("1001", null);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail();

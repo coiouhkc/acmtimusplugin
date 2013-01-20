@@ -8,7 +8,11 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources;bundle-version="3.8.1",
  org.eclipse.jdt.core;bundle-version="3.8.2",
- org.eclipse.jdt.launching;bundle-version="3.6.100"
+ org.eclipse.jdt.launching;bundle-version="3.6.100",
+ org.eclipse.core.net;bundle-version="1.2.200",
+ org.apache.commons.httpclient;bundle-version="3.1.0",
+ org.apache.httpcomponents.httpclient;bundle-version="4.1.2",
+ org.apache.httpcomponents.httpcore;bundle-version="4.1.4"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: lib/jsoup-1.7.1.jar,

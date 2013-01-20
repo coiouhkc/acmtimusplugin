@@ -66,5 +66,19 @@
             name="Submit">
       </command>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            class="acmtimuseclipseplugin.preferences.AcmTimusPreferencesPage"
+            id="acmtimuseclipseplugin.preferences.AcmTimusPreferencesPage"
+            name="AcmTimus">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="acmtimuseclipseplugin.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
 
 </plugin>

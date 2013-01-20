@@ -1,5 +1,9 @@
 package org.abratuhi.acmtimus.parse;
 
+/**
+ * @author Alexei Bratuhin
+ *
+ */
 public class ParseException extends Exception{
 
 	public ParseException() {}
