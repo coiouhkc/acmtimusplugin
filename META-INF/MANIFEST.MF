@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: AcmTimusEclipsePlugin
-Bundle-SymbolicName: AcmTimusEclipsePlugin; singleton:=true
-Bundle-Version: 1.0.0.0
+Bundle-Name: AcmTimus Export'n'Submit
+Bundle-SymbolicName: org.abratuhi.acmtimus;singleton:=true
+Bundle-Version: 1.0.0.1
 Bundle-Activator: org.abratuhi.acmtimus.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,

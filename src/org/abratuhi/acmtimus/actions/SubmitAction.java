@@ -75,13 +75,14 @@ public class SubmitAction extends AbstractHandler {
 			Part[] parts = new Part[] { new StringPart("Action", "submit"),
 					new StringPart("SpaceID", "1"),
 					new StringPart("JudgeID", judgeId),
-					new StringPart("Language", "7"),
+					new StringPart("Language", "12"),
 					new StringPart("ProblemNum", problemNum),
 					new StringPart("Source", ""),
 					new FilePart("SourceFile", file) };
 			MultipartRequestEntity mre = new MultipartRequestEntity(parts,
 					post.getParams());
 			post.setRequestEntity(mre);
+			mre.writeRequest(System.out);
 			int result = hc.executeMethod(post);
 		} catch (Exception e) {
 			e.printStackTrace();

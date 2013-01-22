@@ -41,7 +41,7 @@ public class AcmTimusPreferencesPage extends FieldEditorPreferencePage
 		sfePassword.getTextControl(getFieldEditorParent()).setEchoChar('*');
 		addField(sfePassword);
 		
-		addField(new StringFieldEditor(PreferenceConstants.PREF_JUDGEID, "Judge-ID“",
+		addField(new StringFieldEditor(PreferenceConstants.PREF_JUDGEID, "Judge-ID",
 				getFieldEditorParent()));
 		
 		addField(new StringFieldEditor(PreferenceConstants.PREF_WORKSPACE, "Workspace",
@@ -50,8 +50,8 @@ public class AcmTimusPreferencesPage extends FieldEditorPreferencePage
 		addField(new StringFieldEditor(PreferenceConstants.PREF_PROJECT, "Project",
 				getFieldEditorParent()));
 		
-		addField(new StringFieldEditor(PreferenceConstants.PREF_PACKAGE, "Packages",
-				getFieldEditorParent()));
+//		addField(new StringFieldEditor(PreferenceConstants.PREF_PACKAGE, "Packages",
+//				getFieldEditorParent()));
 
 	}
 
